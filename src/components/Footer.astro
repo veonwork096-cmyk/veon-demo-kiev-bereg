@@ -1,0 +1,54 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { company, nav, footerService, FUTURE_NOTE } from "../data/site";
+const year = 2026;
+---
+<footer class="site-footer on-water" data-rec="R-105">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <Logo />
+      <p class="site-footer__legal">{company.legal}<br />ЄДРПОУ <span class="num">{company.edrpou}</span></p>
+    </div>
+    <nav class="site-footer__nav" id="footer-nav" aria-label="Розділи сторінки">
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><FutureLink note={FUTURE_NOTE} class="future-link--start">Наші роботи</FutureLink></li>
+      </ul>
+    </nav>
+    <ul class="site-footer__service" aria-label="Для покупців">
+      {footerService.map((s) => <li><FutureLink note={FUTURE_NOTE} class="future-link--start">{s}</FutureLink></li>)}
+    </ul>
+    <div class="site-footer__contact">
+      <a class="site-footer__phone num" href={company.tel}>{company.phoneDisplay}</a>
+      <a href={company.mailto}>{company.email}</a>
+      <a class="site-footer__fb" href={company.facebook} data-rec="R-111"><Icon name="facebook" size={20} />Facebook</a>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>© 2004–{year} {company.name}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--color-deep); padding-block: var(--s5) var(--s4); font-size: 1rem; }
+  .site-footer :global(.logo) { color: var(--color-on-water); }
+  .site-footer__grid { display: grid; gap: var(--s4); grid-template-columns: minmax(0, 1fr); }
+  .site-footer__legal { margin-top: var(--s2); color: var(--color-on-water-muted); }
+  .site-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s1); }
+  .site-footer a, .site-footer :global(.future-link) { color: var(--color-on-water); min-height: 32px; display: inline-flex; align-items: center; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+  .site-footer__service :global(.future-link) { color: var(--color-on-water-muted); }
+  .site-footer__contact { display: grid; gap: var(--s1); align-content: start; }
+  .site-footer__phone { font-weight: 600; font-size: 1.125rem; }
+  .site-footer__fb { gap: var(--s1); }
+  .site-footer__bottom { margin-top: var(--s5); padding-top: var(--s3); border-top: 1px solid color-mix(in srgb, var(--color-on-water) 18%, transparent); color: var(--color-on-water-muted); font-size: var(--fs-small); }
+  @media (min-width: 768px) {
+    .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .site-footer__grid { grid-template-columns: 1.4fr 1fr 1.2fr 1fr; }
+  }
+</style>

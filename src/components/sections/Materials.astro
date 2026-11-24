@@ -1,0 +1,74 @@
+---
+import FutureLink from "../FutureLink.astro";
+import Icon from "../Icon.astro";
+import { materialsBank, materialsSite, company, FUTURE_NOTE } from "../../data/site";
+const total = materialsBank.length + materialsSite.length;
+---
+<section id="materials" class="section materials" data-rec="R-110" aria-labelledby="materials-title">
+  <div class="container materials__grid">
+    <div class="section__head materials__head">
+      <h2 id="materials-title">Матеріали: {total} категорій для берега і ділянки</h2>
+      <p>У інтернет-магазині «Берега» — матеріали для укріплення берега і схилів та для облаштування ділянки. Наявність і ціну уточнюйте в месенджері чи телефоном.</p>
+    </div>
+
+    <div class="materials__bank">
+      <h3>Для берега і схилів</h3>
+      <div class="strata">
+        <p class="strata__edge" aria-hidden="true">поверхня</p>
+        <ol class="strata__list" aria-label="Від поверхні вглиб">
+          {materialsBank.map((m, i) => <li style={`--i:${i}`}>{m}</li>)}
+        </ol>
+        <p class="strata__edge strata__edge--deep" aria-hidden="true">вглиб</p>
+      </div>
+    </div>
+
+    <div class="materials__site">
+      <h3>Для ділянки і терас</h3>
+      <ul class="materials__plain">
+        {materialsSite.map((m) => <li>{m}</li>)}
+      </ul>
+      <div class="materials__actions">
+        <a class="btn btn--accent" href={company.viber}><Icon name="viber" />Уточнити наявність і ціну</a>
+        <p class="materials__alt">або <a href={company.telegram}>Telegram</a>, <a class="num" href={company.tel}>{company.phoneDisplay}</a></p>
+        <FutureLink note={FUTURE_NOTE} class="materials__catalog future-link--start">Каталог матеріалів</FutureLink>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .materials { background: var(--color-sand); }
+  .materials__grid { display: grid; gap: var(--s5); }
+  .materials__head { margin-bottom: 0; }
+  .materials__head p { color: var(--color-text-muted); }
+  .materials h3 { margin-bottom: var(--s3); }
+  .strata { display: grid; gap: var(--s1); }
+  .strata__edge { font-size: 1rem; color: var(--color-text-muted); }
+  .strata__list { list-style: none; padding: 0; margin: 0; display: grid; border-top: 2px solid var(--color-text); }
+  .strata__list li {
+    padding: 16px var(--s2);
+    font-weight: 600;
+    font-size: 1.125rem;
+    background: color-mix(in srgb, var(--color-sand-deep) calc(var(--i) * 16%), var(--color-sand-light));
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent);
+  }
+  .materials__plain { list-style: none; padding: 0; margin: 0; display: grid; }
+  .materials__plain li { padding-block: 12px; border-bottom: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent); }
+  .materials__plain li:first-child { border-top: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent); }
+  .materials__actions { margin-top: var(--s4); display: grid; gap: var(--s2); justify-items: start; }
+  .materials__actions .btn { white-space: nowrap; padding-inline: var(--s2); font-size: 1rem; }
+  .materials__alt { color: var(--color-text-muted); }
+  .materials__alt a { color: var(--color-text); font-weight: 600; }
+  .materials :global(.materials__catalog) { min-height: 44px; font-weight: 600; }
+
+  @media (min-width: 1024px) {
+    .materials__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s5); }
+    .materials__head { grid-column: 1 / 13; max-width: none; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; }
+    .materials__head h2 { grid-column: 1 / 8; }
+    .materials__head p { grid-column: 8 / 13; }
+    .materials__bank { grid-column: 1 / 7; }
+    .materials__site { grid-column: 8 / 13; }
+    .materials__site h3 { font-size: var(--fs-lead); font-family: var(--font-body); font-weight: 600; line-height: var(--lh-head); min-height: 1.75rem; display: flex; align-items: flex-end; }
+    .materials__bank h3 { min-height: 1.75rem; display: flex; align-items: flex-end; font-size: var(--fs-lead); }
+  }
+</style>

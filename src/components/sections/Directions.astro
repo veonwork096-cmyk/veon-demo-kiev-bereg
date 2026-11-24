@@ -1,0 +1,160 @@
+---
+import { Picture } from "astro:assets";
+import Diagram from "../Diagram.astro";
+import FutureLink from "../FutureLink.astro";
+import Icon from "../Icon.astro";
+import { directions, company, FUTURE_NOTE } from "../../data/site";
+import { directionPhotos } from "../../data/photos";
+
+const total = directions.reduce((n, d) => n + d.services.length, 0);
+const sizes: Record<string, string> = {
+  // photos fill the row height (object-fit: cover), so the source must cover the stretched frame
+  lg: "(min-width: 1024px) 690px, 100vw",
+  tall: "(min-width: 1024px) 260px, 100vw",
+  strip: "(min-width: 1024px) 690px, 100vw",
+  md: "(min-width: 1024px) 560px, 100vw",
+  "md-rev": "(min-width: 1024px) 560px, 100vw",
+};
+---
+<section id="directions" class="section directions" data-rec="R-102" aria-labelledby="directions-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="directions-title">П'ять напрямів&nbsp;— {total} послуга</h2>
+      <p>Знайдіть свою задачу: від берега біля будинку до лагуни на агропідприємстві. Під кожним напрямом — розріз того, що залишиться під водою і в ґрунті.</p>
+    </div>
+
+    <div class="dir-list">
+      {directions.map((d, i) => {
+        const photo = directionPhotos[d.photo];
+        const bodyId = `${d.id}-body`;
+        const photoId = `${d.id}-photo`;
+        return (
+          <article class={`dir dir--${d.layout}`} id={d.id} aria-labelledby={`${d.id}-t`}>
+            <div class="dir__head">
+              <h3 id={`${d.id}-t`}>{d.title}</h3>
+              <p class="dir__solves">{d.solves}</p>
+            </div>
+            <div class="dir__visual">
+              <div class="dir__diagram" data-reveal="dive">
+                <Diagram kind={d.diagram} uid={d.id} label={d.diagramLabel} />
+                <p class="dir__diagram-cap">Розріз: {d.diagramLabel}</p>
+              </div>
+              <figure class="dir__photo" id={photoId}>
+                <Picture src={photo} formats={["webp"]} widths={[Math.round(photo.width / 2), photo.width]} sizes={sizes[d.layout]} alt={d.caption} loading="lazy" decoding="async" quality={78} />
+                <figcaption>{d.caption}</figcaption>
+              </figure>
+            </div>
+            <button class="dir__toggle" type="button" aria-expanded="false" aria-controls={`${bodyId} ${photoId}`} data-dir-toggle hidden>
+              <Icon name="plus" size={20} /><span data-dir-toggle-label>Послуги і фото об'єкта</span>
+            </button>
+            <div class="dir__body" id={bodyId}>
+              <ul class="dir__services">
+                {d.services.map((s) => <li>{s}</li>)}
+              </ul>
+              <FutureLink note={FUTURE_NOTE} class="dir__more future-link--start">Детальніше про напрям</FutureLink>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="dir-cta" data-rec="R-101">
+      <p class="dir-cta__text">Не знайшли свою задачу або не знаєте, який метод підійде? Надішліть фото берега чи ділянки у Viber або Telegram чи просто подзвоніть.</p>
+      <div class="dir-cta__actions">
+        <a class="dir-cta__phone num" href={company.tel}>{company.phoneDisplay}</a>
+        <a class="btn btn--accent btn--lg" href={company.tel}><Icon name="phone" />Подзвонити</a>
+        <a class="btn btn--ghost" href={company.viber}><Icon name="viber" />Viber</a>
+        <a class="btn btn--ghost" href={company.telegram}><Icon name="telegram" />Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .directions { background: var(--color-bg); }
+  .dir-list { display: grid; }
+  .dir { display: flex; flex-direction: column; gap: var(--s2); padding-block: var(--s4); border-top: var(--line); --dg-fs: 22px; }
+  .dir:last-child { border-bottom: var(--line); }
+  .dir__head { order: 1; display: grid; gap: var(--s1); align-content: start; }
+  .dir__solves { color: var(--color-text-muted); max-width: 34rem; }
+  .dir__visual { display: contents; }
+  .dir__diagram { order: 2; border: var(--line); background: var(--color-surface); }
+  .dir__diagram-cap { padding: var(--s1) 12px; font-size: var(--fs-small); color: var(--color-text-muted); border-top: var(--line); }
+  .dir__toggle { order: 3; display: inline-flex; align-items: center; gap: var(--s1); min-height: 48px; padding: 0 var(--s2); align-self: flex-start; background: none; border: 1.5px solid var(--color-water); border-radius: var(--radius); color: var(--color-water); font: inherit; font-weight: 600; cursor: pointer; transition: background-color var(--dur-fast) ease-out, color var(--dur-fast) ease-out; }
+  .dir__toggle:hover { background: var(--color-water); color: var(--color-on-water); }
+  .dir__toggle :global(.icon) { transition: transform 200ms var(--ease-out); }
+  .dir__toggle[aria-expanded="true"] :global(.icon) { transform: rotate(45deg); }
+  .dir__toggle[hidden] { display: none; }
+  .dir__body { order: 4; display: grid; gap: var(--s2); }
+  .dir__photo { order: 5; }
+  .dir__photo :global(img) { width: 100%; height: auto; }
+  .dir__photo figcaption { margin-top: var(--s1); font-size: var(--fs-small); color: var(--color-text-muted); }
+  .dir__services { list-style: none; padding: 0; display: grid; }
+  .dir__services li { padding-block: 12px; border-bottom: var(--line); font-weight: 600; }
+  .dir__services li:first-child { border-top: var(--line); }
+  .dir :global(.dir__more) { align-self: flex-start; justify-self: start; min-height: 44px; font-weight: 600; color: var(--color-water); }
+
+  /* phones: accordion (only when scripts run); list, photo and link open together */
+  @media (max-width: 1023px) {
+    :global(.js) .dir:not(.is-open) .dir__body, :global(.js) .dir:not(.is-open) .dir__photo { display: none; }
+    :global(.js) .dir.is-open .dir__body, :global(.js) .dir.is-open .dir__photo { animation: dir-open 300ms ease-out both; }
+  }
+  @keyframes dir-open { from { opacity: 0; } to { opacity: 1; } }
+
+  /* 1024+: head row on top, then one content row where section, photo and services share the same height.
+     Photos stretch to the row (object-fit: cover); every row keeps its own weight and order. */
+  @media (min-width: 1024px) {
+    .dir { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--s3); padding-block: var(--s5); --dg-fs: 17px; }
+    .dir__visual { display: contents; }
+    .dir__toggle { display: none; }
+    .dir__head { grid-column: 1 / 9; grid-row: 1; }
+    .dir__diagram, .dir__photo, .dir__body { order: 0; grid-row: 2; }
+    .dir__diagram { grid-column: 1 / 7; align-self: start; }
+    .dir__photo { grid-column: 7 / 10; display: flex; flex-direction: column; min-height: 0; }
+    .dir__photo :global(picture) { position: relative; display: block; flex: 1 1 auto; min-height: 220px; }
+    .dir__photo :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .dir__body { grid-column: 10 / 13; align-self: stretch; align-content: space-between; }
+
+    /* largest row: services beside the title, wide section + big photo below */
+    .dir--lg .dir__head { grid-column: 1 / 7; }
+    .dir--lg .dir__head h3 { font-size: var(--fs-h2); }
+    .dir--lg .dir__body { grid-column: 8 / 13; grid-row: 1; align-content: start; }
+    .dir--lg .dir__diagram { grid-column: 1 / 8; }
+    .dir--lg .dir__photo { grid-column: 8 / 13; }
+    .dir--lg { --dg-fs: 15px; }
+    /* industrial: services first, then section, photo on the right */
+    .dir--md .dir__body { grid-column: 1 / 4; }
+    .dir--md .dir__diagram { grid-column: 4 / 10; }
+    .dir--md .dir__photo { grid-column: 10 / 13; }
+    /* design: photo first */
+    .dir--md-rev .dir__photo { grid-column: 1 / 4; }
+    .dir--md-rev .dir__diagram { grid-column: 4 / 10; }
+    /* ponds: the photo is a low strip — it heads the right column, the services follow it */
+    .dir--strip .dir__head { grid-column: 1 / 7; }
+    .dir--strip .dir__diagram { grid-column: 1 / 7; }
+    .dir--strip .dir__photo { grid-column: 8 / 13; grid-row: 1; display: block; }
+    .dir--strip .dir__photo :global(picture) { position: static; min-height: 0; }
+    .dir--strip .dir__photo :global(img) { position: static; height: auto; }
+    .dir--strip .dir__body { grid-column: 8 / 13; align-content: start; }
+  }
+  @media (min-width: 1200px) {
+    .dir { --dg-fs: 14px; }
+    .dir--lg { --dg-fs: 12.5px; }
+  }
+
+  .dir-cta { margin-top: var(--s5); display: grid; gap: var(--s3); }
+  .dir-cta__text { font-size: var(--fs-lead); max-width: 36rem; }
+  .dir-cta__actions { display: grid; gap: var(--s2); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; }
+  .dir-cta__actions .btn--accent, .dir-cta__phone { grid-column: 1 / -1; }
+  .dir-cta__phone { display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); text-decoration: none; white-space: nowrap; justify-self: start; }
+  .dir-cta__phone:hover { text-decoration: underline; text-decoration-color: var(--color-waterline); text-underline-offset: 6px; }
+  @media (min-width: 768px) {
+    .dir-cta__actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .dir-cta__actions .btn--accent { grid-column: auto; }
+  }
+  @media (min-width: 1024px) {
+    .dir-cta { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: center; }
+    .dir-cta__text { grid-column: 1 / 6; }
+    .dir-cta__actions { grid-column: 7 / 13; }
+  }
+</style>

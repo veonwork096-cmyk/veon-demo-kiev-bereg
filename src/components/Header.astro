@@ -1,0 +1,91 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import FutureLink from "./FutureLink.astro";
+import { company, nav, FUTURE_NOTE } from "../data/site";
+---
+<header class="site-header" data-rec="R-105">
+  <div class="container site-header__bar">
+    <Logo />
+    <nav class="site-nav" aria-label="Головне меню">
+      <ul>
+        {nav.map((n) => <li><a class="site-nav__link" href={n.href}>{n.label}</a></li>)}
+        <li><FutureLink note={FUTURE_NOTE} class="site-nav__future">Наші роботи</FutureLink></li>
+      </ul>
+    </nav>
+    <div class="site-header__contact">
+      <a class="site-header__phone" href={company.tel}>{company.phoneShort}</a>
+      <a class="icon-link" href={company.viber} aria-label="Написати у Viber"><Icon name="viber" /></a>
+      <a class="icon-link" href={company.telegram} aria-label="Написати в Telegram"><Icon name="telegram" /></a>
+      <FutureLink note={FUTURE_NOTE} class="site-header__lang future-link--end"><span lang="ru">RU</span></FutureLink>
+    </div>
+    <a class="icon-link site-header__call" href={company.tel} aria-label={`Подзвонити ${company.phoneDisplay}`} data-rec="R-101"><Icon name="phone" /></a>
+    <a class="site-header__menu" href="#footer-nav" aria-controls="menu" aria-expanded="false" data-menu-open>
+      <Icon name="menu" /><span>Меню</span>
+    </a>
+  </div>
+
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Меню" hidden>
+    <div class="container menu__top">
+      <Logo class="logo--on-water" />
+      <button class="menu__close" type="button" data-menu-close><Icon name="close" /><span>Закрити</span></button>
+    </div>
+    <div class="container menu__body">
+      <ul class="menu__list">
+        {nav.map((n) => <li><a href={n.href} data-menu-link>{n.label}</a></li>)}
+        <li><FutureLink note={FUTURE_NOTE}>Наші роботи</FutureLink></li>
+        <li><FutureLink note={FUTURE_NOTE}><span lang="ru">RU</span></FutureLink></li>
+      </ul>
+      <div class="menu__contact">
+        <a class="menu__phone num" href={company.tel}>{company.phoneDisplay}</a>
+        <a class="btn btn--accent btn--block" href={company.tel}><Icon name="phone" />Подзвонити</a>
+        <div class="btn-row">
+          <a class="btn btn--ghost-dark" href={company.viber}><Icon name="viber" />Viber</a>
+          <a class="btn btn--ghost-dark" href={company.telegram}><Icon name="telegram" />Telegram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; background: var(--color-bg); border-bottom: var(--line); }
+  .site-header__bar { display: flex; align-items: center; gap: var(--s3); min-height: var(--header-h); }
+  .site-nav { display: none; }
+  .site-nav ul { display: flex; align-items: center; gap: 20px; list-style: none; margin: 0; padding: 0; }
+  .site-nav__link { white-space: nowrap; display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; font-size: 1rem; color: var(--color-text); position: relative; }
+  .site-nav__link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 2px; background: var(--color-waterline); transform: scaleX(0); transform-origin: left; transition: transform 200ms var(--ease-out); }
+  .site-nav__link:hover::after, .site-nav__link.is-active::after { transform: scaleX(1); }
+  .site-nav__link.is-active { color: var(--color-accent-text); }
+  .site-nav :global(.future-link) { white-space: nowrap; min-height: 44px; }
+  .site-header__contact { display: none; align-items: center; gap: var(--s1); margin-left: auto; }
+  .site-header__phone { font-weight: 600; font-size: 1.0625rem; font-variant-numeric: tabular-nums; text-decoration: none; padding-inline: var(--s1); min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap; }
+  .site-header__phone:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .site-header__lang { min-height: 44px; padding-inline: var(--s1); }
+  .site-header__call { margin-left: auto; }
+  .site-header__menu { display: inline-flex; align-items: center; gap: var(--s1); min-height: 48px; padding: 0 var(--s2); border: 1.5px solid var(--color-water); border-radius: var(--radius); text-decoration: none; font-weight: 600; color: var(--color-water); background: none; font: inherit; cursor: pointer; }
+  .site-header__menu:hover { background: var(--color-water); color: var(--color-on-water); }
+  @media (min-width: 768px) {
+    .site-header__contact { display: flex; }
+    .site-header__call { display: none; }
+    .site-header__menu { margin-left: 0; }
+  }
+  @media (min-width: 1280px) {
+    .site-nav { display: block; margin-left: var(--s3); }
+    .site-header__menu { display: none; }
+  }
+
+  /* full-screen menu (390–1199) */
+  .menu { position: fixed; inset: 0; z-index: 60; background: var(--color-water); color: var(--color-on-water); overflow-y: auto; overscroll-behavior: contain; }
+  .menu[hidden] { display: none; }
+  .menu__top { display: flex; align-items: center; justify-content: space-between; min-height: var(--header-h); }
+  .menu__close { display: inline-flex; align-items: center; gap: var(--s1); min-height: 48px; padding: 0 var(--s2); background: none; color: var(--color-on-water); border: 1.5px solid var(--color-on-water); border-radius: var(--radius); font: inherit; font-weight: 600; cursor: pointer; }
+  .menu__close:hover { background: var(--color-on-water); color: var(--color-water); }
+  .menu__body { padding-block: var(--s4) var(--s5); display: grid; gap: var(--s5); }
+  .menu__list { list-style: none; margin: 0; padding: 0; display: grid; }
+  .menu__list > li { border-bottom: 1px solid color-mix(in srgb, var(--color-on-water) 22%, transparent); }
+  .menu__list a, .menu__list :global(.future-link) { display: flex; align-items: center; min-height: 56px; font-family: var(--font-display); font-weight: 700; font-size: 1.625rem; text-decoration: none; color: var(--color-on-water); }
+  .menu__contact { display: grid; gap: var(--s2); }
+  .menu__phone { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h3); color: var(--color-on-water); text-decoration: none; white-space: nowrap; }
+  .menu :global(:focus-visible) { outline-color: var(--color-focus-dark); }
+</style>

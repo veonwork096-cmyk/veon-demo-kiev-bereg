@@ -1,0 +1,75 @@
+/* Hallmark · shape: waterline-section · genre: modern-minimal · theme: custom · job: hire · idea: "Берег у розрізі: над лінією води — реальне фото готового берега, під нею — те, що «Берег» збудував і чого ніхто не бачить" · vibe: "інженерний розріз, спокійно, тушшю на світлому"
+ * paper: #F2F4F2 · accent: #FF8000 · display: Podkova · body: Ruda · hero: фото Осокорків стоїть на лінії води, під нею темна вода з дзвінком і розріз ПВХ-шпунта з анкерною тягою · nav: sticky light bar, logo left, anchors, phone text + Viber/Telegram right; 390 — logo, call icon, menu · footer: compact deep-water, logo, anchors, service FutureLinks, ТОВ/ЄДРПОУ · imagery: client photos · signature: одна лінія уреза води #1E88C8 зі знаком ▽ — в герої і в кожному розрізі на тій самій висоті
+ * surface: absolute (white #FFFFFF only as the drawing sheet of the cross-sections, concept §8.4) · axes: air/slab-serif/hard-hat-orange · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 · weakest: P (photos 690×460 only), never shown wider than 690 CSS px, framed by diagrams instead of stretched */
+/* Hallmark · waive 7b · --color-surface #FFFFFF · concept §8.4 fixes pure white as the drawing sheet of the cross-sections (listed in veon-concept colors); the page paper itself is tinted #F2F4F2 */
+/* Hallmark · waive 39b · a.btn--lg 56px · concept §8.3 and §8.15 set the main call button at 56px (hire job: the call is the page's one action); secondary buttons stay 48px */
+/* Hallmark · waive 59 · --section-gap 104px · concept §8.6 fixes the 8-step rhythm 8·16·24·40·64·104 with 104px between sections; colour planes (air/water/sand) separate the sections as well */
+/* Hallmark · answer F19 · four weights are the concept's pairing: Podkova 700/800 for display, Ruda 400/600 for text (§8.5) */
+/* Hallmark · answer F25 · on phones the services list, object photo and caption sit in an accordion per direction (concept §8.9), one tap away */
+/* Client design tokens — only from design/concept.md (§8.4 palette, §8.5 type, §8.6 grid). */
+:root {
+  /* colour roles */
+  --color-bg: #F2F4F2;            /* «повітря» */
+  --color-surface: #FFFFFF;       /* поля діаграм */
+  --color-text: #182226;          /* туш */
+  --color-text-muted: #4F5B60;
+  --color-water: #0E3346;         /* primary «вода» */
+  --color-deep: #0A2838;          /* підвал */
+  --color-on-water: #EAF1F4;
+  --color-on-water-muted: #A8BDC7;
+  --color-waterline: #1E88C8;     /* тільки графіка */
+  --color-accent: #FF8000;        /* тільки дія */
+  --color-on-accent: #182226;
+  --color-accent-ink: var(--color-on-accent);
+  --color-accent-hover: #E87400;
+  --color-accent-text: #A84300;
+  --color-sand: #E4D8BF;
+  --color-sand-light: #EDE4D1;
+  --color-sand-deep: #D9CAAB;
+  --color-border: #C5CDCF;
+  --color-border-input: #6B777C;
+  --color-ground-dark: #1F4457;   /* ґрунт у розрізі на темній воді */
+  --color-water-fill: color-mix(in srgb, var(--color-waterline) 18%, transparent);
+  --color-water-fill-dark: color-mix(in srgb, var(--color-waterline) 38%, transparent);
+  --color-focus: var(--color-water);
+  --color-focus-dark: var(--color-accent);
+
+  /* type */
+  --font-display: "Podkova", "Podkova Fallback", Georgia, serif;
+  --font-body: "Ruda", "Ruda Fallback", Arial, sans-serif;
+  --fs-h1: clamp(2.25rem, 1.6rem + 2.8vw, 4rem);        /* 36 → 64 */
+  --fs-h2: clamp(1.875rem, 1.5rem + 1.55vw, 2.75rem);    /* 30 → 44 */
+  --fs-h3: clamp(1.375rem, 1.25rem + .45vw, 1.625rem);   /* 22 → 26 */
+  --fs-lead: clamp(1.0625rem, 1rem + .2vw, 1.1875rem);   /* 17 → 19 */
+  --fs-body: 1.0625rem;                                   /* 17 */
+  --fs-small: .875rem;                                    /* 14 */
+  --fs-phone: clamp(1.75rem, .25rem + 8.6vw, 4.5rem);   /* 31 (320) · 37 (390) → 72 */
+  --lh-tight: 1.06;
+  --lh-head: 1.12;
+  --lh-text: 1.55;
+  --measure: 68ch;
+
+  /* grid & rhythm */
+  --container: 1240px;
+  --gutter: 24px;
+  --pad: 20px;                  /* поля: 20 (390) · 32 (768) · 100 (1440) */
+  --s1: 8px; --s2: 16px; --s3: 24px; --s4: 40px; --s5: 64px; --s6: 104px;
+  --section-gap: var(--s5);
+  --space: var(--pad);
+  --header-h: 56px;
+  --bar-h: 64px;
+  --radius: 2px;
+  --line: 1px solid var(--color-border);
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+  --dur-fast: 150ms;
+}
+@media (min-width: 768px) {
+  :root { --pad: 32px; --header-h: 72px; }
+}
+@media (min-width: 1200px) {
+  :root { --pad: 100px; --section-gap: var(--s6); }
+}

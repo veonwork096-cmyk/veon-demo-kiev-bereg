@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ContactBar from "../components/ContactBar.astro";
+import Hero from "../components/sections/Hero.astro";
+import Directions from "../components/sections/Directions.astro";
+import Approach from "../components/sections/Approach.astro";
+import Materials from "../components/sections/Materials.astro";
+import About from "../components/sections/About.astro";
+import Contacts from "../components/sections/Contacts.astro";
+import { getHeroImage } from "../lib/heroImage";
+import { company, directions } from "../data/site";
+
+const title = "Гідротехнічне будівництво в Києві — БК «Берег»";
+const description = "Укріплення берегів і схилів, причали, набережні, водойми, промислові об'єкти й матеріали для берега. Київ і область, з 2004 року. +38 097 804-86-33";
+const img = await getHeroImage();
+
+// Organization + LocalBusiness (concept §8.10). No prices, no ratings.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  name: company.name,
+  legalName: company.legal,
+  foundingDate: String(company.since),
+  telephone: "+380978048633",
+  email: company.email,
+  address: { "@type": "PostalAddress", postalCode: "04086", addressLocality: "Київ", streetAddress: "вул. Петропавлівська, 34А", addressCountry: "UA" },
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "19:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "09:00", closes: "16:00" },
+  ],
+  areaServed: [{ "@type": "City", name: "Київ" }, { "@type": "AdministrativeArea", name: "Київська область" }],
+  sameAs: [company.facebook],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Послуги",
+    itemListElement: directions.map((d) => ({
+      "@type": "OfferCatalog",
+      name: d.title,
+      itemListElement: d.services.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s } })),
+    })),
+  },
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <Fragment slot="head">
+    <link rel="preload" as="image" type="image/webp" imagesrcset={img.srcsetM} imagesizes={img.sizesM} media="(max-width: 767px)" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={img.srcsetD} imagesizes={img.sizesD} media="(min-width: 768px)" fetchpriority="high" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+  <Header slot="header" />
+  <Hero img={img} />
+  <Directions />
+  <Approach />
+  <Materials />
+  <About />
+  <Contacts />
+  <Footer slot="footer" />
+  <ContactBar slot="footer" />
+</Base>

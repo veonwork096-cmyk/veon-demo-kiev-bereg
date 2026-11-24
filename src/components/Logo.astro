@@ -1,0 +1,20 @@
+---
+// Client logo (beaver in a hard hat over waves, C-013) + the word «Берег» in Podkova. Always leads to #top.
+import logo from "../assets/brand/logo.svg";
+interface Props { class?: string; }
+const { class: cls } = Astro.props;
+---
+<a class:list={["logo", cls]} href="#top" aria-label="Будівельна компанія «Берег» — на початок сторінки">
+  <img src={logo.src} width="52" height="36" alt="" decoding="async" />
+  <span class="logo__word">Берег</span>
+</a>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: var(--s1); min-height: 44px; text-decoration: none; color: inherit; border-radius: var(--radius); }
+  .logo img { width: 52px; height: 36px; }
+  .logo__word { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1; letter-spacing: 0; }
+  @media (max-width: 767px) {
+    .logo img { width: 44px; height: 31px; }
+    .logo__word { font-size: 1.3rem; }
+  }
+</style>

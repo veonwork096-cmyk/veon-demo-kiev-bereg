@@ -1,0 +1,115 @@
+---
+import Icon from "../Icon.astro";
+import Diagram from "../Diagram.astro";
+import { company } from "../../data/site";
+import type { HeroImage } from "../../lib/heroImage";
+
+const H1 = "Укріплюємо береги, будуємо причали і водойми в Києві та області";
+const caption = "Берегоукріплення ПВХ шпунтом, Осокорки, Київ";
+interface Props { img: HeroImage; }
+const { img } = Astro.props;
+const { srcsetD, srcsetM, sizesD, sizesM, fallback } = img;
+---
+<section id="hero" class="hero" data-rec="R-101,R-108" aria-label="Перший екран">
+  <div class="container hero__air">
+    <div class="hero__text">
+      <h1>{H1}</h1>
+      <p class="hero__lead">Будівельна компанія «Берег» з 2004 року: гідротехнічні роботи — від ділянки біля води до промислових об'єктів, а також матеріали для берега й ділянки.</p>
+    </div>
+    <figure class="hero__photo">
+      <figcaption>{caption}</figcaption>
+      <picture>
+        <source media="(max-width: 767px)" type="image/webp" srcset={srcsetM} sizes={sizesM} />
+        <source type="image/webp" srcset={srcsetD} sizes={sizesD} />
+        <img src={fallback} width="690" height="460" alt={caption} loading="eager" fetchpriority="high" decoding="async" />
+      </picture>
+    </figure>
+  </div>
+
+  <div class="hero__line" aria-hidden="true">
+    <div class="waterline hero__waterline"></div>
+    <div class="container hero__level"><span class="hero__level-tag"><span class="hero__tri"></span>рівень води</span></div>
+  </div>
+
+  <div class="hero__water on-water">
+    <div class="container hero__water-grid">
+      <div class="hero__actions">
+        <a class="btn btn--accent btn--lg hero__call" href={company.tel} data-hero-call data-rec="R-101">
+          <Icon name="phone" />Подзвонити <span class="num">{company.phoneDisplay}</span>
+        </a>
+        <div class="hero__msg">
+          <p class="hero__msg-label" id="hero-msg-label">Надіслати фото берега</p>
+          <div class="btn-row" role="group" aria-labelledby="hero-msg-label">
+            <a class="btn btn--ghost-dark" href={company.viber}><Icon name="viber" />Viber</a>
+            <a class="btn btn--ghost-dark" href={company.telegram}><Icon name="telegram" />Telegram</a>
+          </div>
+        </div>
+        <p class="hero__promise" data-rec="R-103">Строки, матеріали і ціну погоджуємо до початку робіт.</p>
+      </div>
+      <div class="hero__section">
+        <Diagram kind="sheetpile" uid="hero" label="ПВХ шпунт з анкерною тягою" class="hero__diagram" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero { background: var(--color-bg); }
+  .hero__air { display: grid; gap: var(--s2); padding-top: var(--s3); }
+  .hero h1 { text-wrap: balance; font-size: var(--fs-h1); line-height: var(--lh-tight); font-weight: 700; max-width: 17ch; }
+  .hero__lead { margin-top: 12px; font-size: var(--fs-lead); line-height: 1.5; color: var(--color-text-muted); max-width: 40rem; }
+  .hero__photo { display: flex; flex-direction: column; margin-inline: calc(-1 * var(--pad)); }
+  .hero__photo figcaption { padding-inline: var(--pad); margin-bottom: var(--s1); font-size: var(--fs-small); color: var(--color-text-muted); }
+  .hero__photo img { width: 100%; aspect-ratio: 690 / 318; object-fit: cover; }
+
+  .hero__line { position: relative; }
+  /* «▽ рівень води» stands on the line, like the level mark on a drawing */
+  .hero__level { position: absolute; left: 0; right: 0; bottom: 100%; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); font-size: var(--fs-small); line-height: 1.2; color: var(--color-text-muted); pointer-events: none; }
+  .hero__level-tag { grid-column: 1 / -1; justify-self: end; display: inline-flex; align-items: flex-end; gap: var(--s1); padding: 4px var(--s1) 0; background: var(--color-bg); }
+  .hero__tri { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 10px solid var(--color-waterline); }
+
+  .hero__water { padding-block: var(--s3) var(--s5); }
+  .hero__water-grid { display: grid; gap: var(--s4); }
+  .hero__actions { display: grid; gap: var(--s2); align-content: start; }
+  .hero__call { width: 100%; white-space: normal; flex-wrap: wrap; column-gap: var(--s1); row-gap: 0; padding-inline: var(--s2); text-align: center; }
+  .hero__call .num { white-space: nowrap; }
+  .hero__msg { display: grid; gap: var(--s1); }
+  .hero__msg-label { font-size: var(--fs-small); color: var(--color-on-water-muted); }
+  .hero__promise { font-size: .9375rem; color: var(--color-on-water-muted); }
+  .hero__section { --dg-fs: 22px; margin-inline: calc(-1 * var(--pad) / 2); }
+
+  @media (min-width: 768px) {
+    .hero__air { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; padding-top: var(--s4); gap: 0 var(--gutter); }
+    .hero__lead { margin-top: var(--s2); }
+    .hero__water { padding-top: var(--s4); }
+    .hero__text { grid-column: 1 / 8; align-self: start; padding-bottom: var(--s4); }
+    .hero__photo { grid-column: 8 / 13; margin-inline: 0; }
+    .hero__photo figcaption { padding-inline: 0; }
+    .hero__photo img { aspect-ratio: 3 / 2; }
+    .hero__water-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .hero__actions { grid-column: 1 / 7; padding-top: var(--s4); gap: var(--s3); }
+    .hero__call { width: auto; justify-self: start; padding-inline: var(--s4); }
+    .hero__msg .btn-row { max-width: 26rem; }
+    .hero__section { grid-column: 8 / 13; margin: calc(-1 * var(--s4)) 0 0; --dg-fs: 17px; }
+    .hero__level-tag { grid-column: 5 / 8; }
+  }
+  @media (min-width: 1200px) {
+    .hero__actions { grid-column: 1 / 6; }
+    .hero__section { --dg-fs: 15.5px; }
+    .hero__water { padding-bottom: var(--s5); }
+  }
+
+  /* Effect 1: the waterline draws left → right; effect 2: the section «dives» top → bottom. */
+  :global(.js) .hero__waterline { animation: wl-draw 700ms var(--ease-out) 80ms both; }
+  :global(.js .hero__diagram) { animation: dive 800ms var(--ease-out) 250ms backwards; }
+  @keyframes wl-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes dive { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 767px) {
+    :global(.js) .hero__waterline { animation-duration: 500ms; }
+    :global(.js .hero__diagram) { animation: fade 400ms ease-out 200ms backwards; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .hero__waterline, :global(.js .hero__diagram) { animation: none; }
+  }
+</style>

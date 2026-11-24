@@ -1,0 +1,82 @@
+---
+import Icon from "../Icon.astro";
+import { company } from "../../data/site";
+---
+<section id="contacts" class="section contacts on-water" data-rec="R-106,R-111" aria-labelledby="contacts-title">
+  <div class="container contacts__grid">
+    <div class="contacts__main">
+      <h2 id="contacts-title">Подзвоніть або надішліть фото берега</h2>
+      <a class="contacts__phone num" href={company.tel}>{company.phoneDisplay}</a>
+      <div class="contacts__msg">
+        <a class="btn btn--accent btn--lg" href={company.tel}><Icon name="phone" />Подзвонити</a>
+        <a class="btn btn--ghost-dark btn--lg" href={company.viber}><Icon name="viber" />Viber</a>
+        <a class="btn btn--ghost-dark btn--lg" href={company.telegram}><Icon name="telegram" />Telegram</a>
+      </div>
+      <div class="contacts__prep">
+        <h3>Що підготувати до дзвінка</h3>
+        <ul>
+          <li>де об'єкт: місто чи село, вулиця або орієнтир;</li>
+          <li>фото берега чи ділянки;</li>
+          <li>що треба зробити.</li>
+        </ul>
+      </div>
+    </div>
+
+    <dl class="contacts__list">
+      <div>
+        <dt>Графік роботи</dt>
+        <dd>
+          <table class="contacts__hours">
+            <tbody>
+              {company.hours.map((h) => <tr><th scope="row">{h.days}</th><td class="num">{h.time}</td></tr>)}
+            </tbody>
+          </table>
+        </dd>
+      </div>
+      <div>
+        <dt>E-mail для запитів і документів</dt>
+        <dd><a href={company.mailto}><Icon name="mail" size={20} />{company.email}</a></dd>
+      </div>
+      <div>
+        <dt>Офіс</dt>
+        <dd><a href={company.map} target="_blank" rel="noopener"><Icon name="pin" size={20} />{company.address}<span class="visually-hidden"> (карта, відкриється в новій вкладці)</span></a></dd>
+      </div>
+      <div>
+        <dt>Facebook</dt>
+        <dd><a href={company.facebook} target="_blank" rel="noopener" data-rec="R-111"><Icon name="facebook" size={20} />facebook.com/KievBereg<span class="visually-hidden"> (відкриється в новій вкладці)</span></a></dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .contacts { background: var(--color-water); }
+  .contacts__grid { display: grid; gap: var(--s5); }
+  .contacts__main { display: grid; gap: var(--s3); align-content: start; }
+  .contacts h2 { color: var(--color-on-water); max-width: 18ch; }
+  .contacts__phone { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-phone); line-height: 1; color: var(--color-on-water); text-decoration: none; white-space: nowrap; justify-self: start; }
+  .contacts__phone:hover { text-decoration: underline; text-decoration-color: var(--color-waterline); text-decoration-thickness: 3px; text-underline-offset: 8px; }
+  .contacts__msg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+  .contacts__msg .btn--accent { grid-column: 1 / -1; }
+  .contacts__prep { margin-top: var(--s2); padding: var(--s3); border: 1px solid color-mix(in srgb, var(--color-on-water) 28%, transparent); max-width: 34rem; }
+  .contacts__prep h3 { font-size: var(--fs-lead); font-family: var(--font-body); font-weight: 600; color: var(--color-on-water); margin-bottom: var(--s1); }
+  .contacts__prep ul { padding-left: 1.1em; color: var(--color-on-water-muted); }
+  .contacts__list { margin: 0; display: grid; align-content: start; border-top: 1px solid color-mix(in srgb, var(--color-on-water) 22%, transparent); }
+  .contacts__list > div { padding-block: var(--s2); border-bottom: 1px solid color-mix(in srgb, var(--color-on-water) 22%, transparent); display: grid; gap: var(--s1); }
+  .contacts__list dt { font-size: var(--fs-small); color: var(--color-on-water-muted); }
+  .contacts__list dd { margin: 0; }
+  .contacts__list a { display: inline-flex; align-items: flex-start; gap: var(--s1); min-height: 44px; padding-block: 12px; color: var(--color-on-water); font-weight: 600; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--color-on-water) 40%, transparent); overflow-wrap: anywhere; }
+  .contacts__list a:hover { text-decoration-color: var(--color-waterline); }
+  .contacts__list a :global(.icon) { flex: none; margin-top: 2px; }
+  .contacts__hours { border-collapse: collapse; }
+  .contacts__hours th { text-align: left; font-weight: 600; padding: 4px var(--s3) 4px 0; }
+  .contacts__hours td { padding: 4px 0; }
+  @media (min-width: 768px) {
+    .contacts__msg { display: flex; flex-wrap: wrap; }
+  }
+  @media (min-width: 1024px) {
+    .contacts__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .contacts__main { grid-column: 1 / 8; }
+    .contacts__list { grid-column: 9 / 13; }
+  }
+</style>

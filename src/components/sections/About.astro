@@ -1,0 +1,62 @@
+---
+import { Picture } from "astro:assets";
+import FutureLink from "../FutureLink.astro";
+import { company, objects, FUTURE_NOTE } from "../../data/site";
+import { aboutPhoto } from "../../data/photos";
+const caption = "Огородження котловану під басейн, Козин";
+---
+<section id="about" class="section about" data-rec="R-103" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <div class="about__main">
+      <h2 id="about-title" class="about__since">З {company.since} року</h2>
+      <p class="about__lead">Будівельна компанія «Берег» працює в гідротехнічному будівництві з {company.since} року: укріплюємо береги і схили, будуємо підпірні стіни, набережні, причали, водойми і резервуари.</p>
+      <p class="about__text">Виконуємо також загальнобудівельні роботи та благоустрій. Наші об'єкти — у Києві, Київській області та інших регіонах України.</p>
+      <dl class="about__req">
+        <div><dt>Юридична особа</dt><dd>{company.legal}</dd></div>
+        <div><dt>ЄДРПОУ</dt><dd class="num">{company.edrpou}</dd></div>
+        <div><dt>Офіс</dt><dd>{company.address}</dd></div>
+      </dl>
+      <figure class="about__photo">
+        <Picture src={aboutPhoto} formats={["webp"]} widths={[345, 690]} sizes="(min-width: 1024px) 690px, 100vw" alt={caption} loading="lazy" decoding="async" quality={78} />
+        <figcaption>{caption}</figcaption>
+      </figure>
+    </div>
+
+    <div class="about__works">
+      <h3>Об'єкти з розділу «Наші роботи»</h3>
+      <ul class="about__objects">
+        {objects.map((o) => <li><FutureLink note={FUTURE_NOTE} class="future-link--start">{o}</FutureLink></li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { background: var(--color-bg); }
+  .about__grid { display: grid; gap: var(--s5); }
+  .about__main { display: grid; gap: var(--s3); align-content: start; }
+  .about__since { font-size: clamp(3rem, 2rem + 5vw, 6.5rem); font-weight: 700; line-height: 1; }
+  .about__lead { font-size: var(--fs-lead); max-width: var(--measure); }
+  .about__text { color: var(--color-text-muted); max-width: var(--measure); }
+  .about__req { margin: var(--s2) 0 0; display: grid; border-top: var(--line); }
+  .about__req > div { display: grid; gap: 2px; padding-block: 12px; border-bottom: var(--line); }
+  .about__req dt { font-size: var(--fs-small); color: var(--color-text-muted); }
+  .about__req dd { margin: 0; font-weight: 600; }
+  .about__works h3 { margin-bottom: var(--s2); }
+  .about__objects { list-style: none; padding: 0; margin: 0; display: grid; }
+  .about__objects li { border-bottom: var(--line); }
+  .about__objects li:first-child { border-top: var(--line); }
+  .about__objects :global(.future-link) { display: flex; min-height: 48px; padding-block: 12px; line-height: 1.35; }
+  .about__photo { margin-top: var(--s2); }
+  .about__photo :global(img) { width: 100%; height: auto; }
+  .about__photo figcaption { margin-top: var(--s1); font-size: var(--fs-small); color: var(--color-text-muted); }
+
+  @media (min-width: 768px) {
+    .about__req > div { grid-template-columns: 10rem minmax(0, 1fr); gap: var(--s2); align-items: baseline; }
+  }
+  @media (min-width: 1024px) {
+    .about__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .about__main { grid-column: 1 / 7; }
+    .about__works { grid-column: 8 / 13; padding-top: var(--s2); }
+  }
+</style>

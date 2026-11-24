@@ -1,0 +1,26 @@
+---
+// Fixed contact bar for phones (R-101, R-109): shows once the hero call button has left the viewport.
+import Icon from "./Icon.astro";
+import { company } from "../data/site";
+---
+<div class="contact-bar on-water" data-contact-bar data-rec="R-101,R-109">
+  <a class="contact-bar__call" href={company.tel}><Icon name="phone" />Подзвонити</a>
+  <a class="contact-bar__msg" href={company.viber}><Icon name="viber" /><span>Viber</span></a>
+  <a class="contact-bar__msg" href={company.telegram}><Icon name="telegram" /><span>Telegram</span></a>
+</div>
+
+<style>
+  .contact-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--s1); padding: var(--s1) var(--pad) calc(var(--s1) + env(safe-area-inset-bottom, 0px)); min-height: var(--bar-h); border-top: 2px solid var(--color-waterline); transition: transform 250ms var(--ease-out); }
+  .contact-bar a { display: inline-flex; align-items: center; justify-content: center; gap: var(--s1); min-height: 48px; border-radius: var(--radius); font-weight: 600; text-decoration: none; }
+  .contact-bar__call { background: var(--color-accent); color: var(--color-on-accent); }
+  .contact-bar__call:hover { background: var(--color-accent-hover); }
+  .contact-bar__msg { color: var(--color-on-water); border: 1.5px solid var(--color-on-water-muted); font-size: .875rem; }
+  .contact-bar__msg :global(.icon) { width: 20px; height: 20px; }
+  .contact-bar__msg:hover { background: color-mix(in srgb, var(--color-on-water) 12%, transparent); }
+  :global(.js) .contact-bar:not(.is-shown) { transform: translateY(110%); }
+  :global(.js) .contact-bar:not(.is-shown) a { visibility: hidden; }
+  @media (max-width: 359px) {
+    .contact-bar__msg span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  }
+  @media (min-width: 768px) { .contact-bar { display: none; } }
+</style>

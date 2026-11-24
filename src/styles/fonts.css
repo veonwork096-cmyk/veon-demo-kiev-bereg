@@ -1,0 +1,50 @@
+/* Self-hosted variable fonts (SIL OFL 1.1, licences in src/assets/fonts/OFL-*.txt), cyrillic + latin subsets only.
+   Fallback metrics computed from the font files (@capsizecss/unpack) against Arial / Georgia to keep CLS at 0. */
+@font-face {
+  font-family: "Ruda";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("../assets/fonts/ruda-cyrillic-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Ruda";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 900;
+  src: url("../assets/fonts/ruda-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Podkova";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url("../assets/fonts/podkova-cyrillic-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Podkova";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url("../assets/fonts/podkova-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ruda Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 103.6%;
+  ascent-override: 89%;
+  descent-override: 28.5%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Podkova Fallback";
+  src: local("Georgia");
+  size-adjust: 101.4%;
+  ascent-override: 84.7%;
+  descent-override: 24.6%;
+  line-gap-override: 0%;
+}

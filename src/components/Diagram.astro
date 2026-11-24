@@ -1,0 +1,185 @@
+---
+// Method cross-sections (concept §8.7): ink lines, water with the waterline + ▽, hatched ground, short labels.
+// No dimensions, levels or numbers — nothing the client has not given us.
+// Every light diagram shares one geometry: viewBox 560×300, water level at y=120 (40 % from the top) — the page-wide waterline.
+import type { DiagramKind } from "../data/site";
+type Kind = DiagramKind | "sheetpile";
+interface Props { kind: Kind; label: string; uid: string; class?: string; }
+const { kind, label, uid, class: cls } = Astro.props;
+const dark = kind === "sheetpile";
+const hatch = `${uid}-hatch`;
+const stones = `${uid}-stones`;
+const WL = 120;
+const tri = (x: number) => `${x - 7},${WL - 15} ${x + 7},${WL - 15} ${x},${WL - 3}`;
+const gabions: Array<[number, number]> = [
+  [170, 200], [220, 200], [270, 200], [320, 200],
+  [220, 160], [270, 160], [320, 160],
+  [270, 120], [320, 120],
+  [320, 80],
+];
+const piles = [70, 160, 250, 346, 458];
+---
+<svg
+  class:list={["diagram", dark ? "diagram--dark" : "diagram--light", cls]}
+  viewBox={dark ? "0 0 500 300" : "0 0 560 300"}
+  role="img"
+  aria-label={`Схема: ${label} у розрізі`}
+  preserveAspectRatio="xMidYMid meet"
+>
+  <defs>
+    <pattern id={hatch} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="9" class="dg-hatch" />
+    </pattern>
+    <pattern id={stones} width="16" height="13" patternUnits="userSpaceOnUse">
+      <ellipse cx="4.5" cy="4" rx="3.6" ry="2.8" class="dg-stone" />
+      <ellipse cx="12.5" cy="9.5" rx="3.4" ry="2.6" class="dg-stone" />
+    </pattern>
+  </defs>
+
+  {!dark && <rect class="dg-paper" x="0" y="0" width="560" height="300" />}
+
+  {kind === "sheetpile" && (
+    <g>
+      <path class="dg-water" d="M0,0 H176 V170 L0,190 Z" />
+      <path class="dg-ground" d="M0,190 L176,170 V0 H500 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,190 L176,170 V0 H500 V300 H0 Z" />
+      <path class="dg-line" d="M0,190 L176,170" />
+      <line class="dg-tie" x1="186" y1="44" x2="414" y2="112" />
+      <rect class="dg-solid" x="414" y="88" width="9" height="52" />
+      <rect class="dg-solid" x="176" y="0" width="10" height="276" />
+      <text class="dg-label" x="28" y="92">вода</text>
+      <text class="dg-label dg-halo" x="232" y="34">анкерна тяга</text>
+      <text class="dg-label" x="14" y="246">ПВХ шпунт</text>
+      <line class="dg-lead" x1="146" y1="240" x2="172" y2="240" />
+      <text class="dg-label dg-halo" x="330" y="238">ґрунт</text>
+    </g>
+  )}
+
+  {kind === "gabion" && (
+    <g>
+      <path class="dg-water" d="M0,120 H270 V160 H220 V200 H170 V240 H0 Z" />
+      <path class="dg-ground" d="M0,240 H370 V80 H560 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,240 H370 V80 H560 V300 H0 Z" />
+      <path class="dg-line" d="M0,240 H170 M370,80 H560" />
+      <path class="dg-geo" d="M374,78 V244 H166" />
+      <line class="dg-mat" x1="378" y1="77" x2="556" y2="77" />
+      {gabions.map(([x, y]) => (
+        <g>
+          <rect class="dg-gabion" x={x} y={y} width="50" height="40" />
+          <rect fill={`url(#${stones})`} x={x + 2} y={y + 2} width="46" height="36" />
+        </g>
+      ))}
+      <line class="dg-wl" x1="0" y1={WL} x2="270" y2={WL} />
+      <polygon class="dg-tri" points={tri(40)} />
+      <text class="dg-label" x="36" y="186">вода</text>
+      <text class="dg-label" x="118" y="58">габіони</text>
+      <line class="dg-lead" x1="196" y1="64" x2="290" y2="134" />
+      <text class="dg-label" x="400" y="58">геомати</text>
+      <text class="dg-label dg-halo" x="388" y="176">геотекстиль</text>
+      <text class="dg-label dg-halo" x="452" y="272">ґрунт</text>
+    </g>
+  )}
+
+  {kind === "pier" && (
+    <g>
+      <path class="dg-water" d="M0,120 H405 L300,240 L0,250 Z" />
+      <path class="dg-ground" d="M0,250 L300,240 L430,92 H560 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,250 L300,240 L430,92 H560 V300 H0 Z" />
+      <path class="dg-line" d="M0,250 L300,240 L430,92 H560" />
+      <line class="dg-wl" x1="0" y1={WL} x2="405" y2={WL} />
+      {piles.map((x) => <rect class="dg-solid" x={x} y="68" width="8" height={x > 440 ? 70 : 222} />)}
+      <rect class="dg-deck" x="40" y="56" width="440" height="12" />
+      <polygon class="dg-tri" points={tri(206)} />
+      <text class="dg-label" x="40" y="42">настил</text>
+      <text class="dg-label" x="92" y="176">вода</text>
+      <text class="dg-label" x="178" y="214">палі</text>
+      <text class="dg-label dg-halo" x="452" y="236">ґрунт</text>
+    </g>
+  )}
+
+  {kind === "pond" && (
+    <g>
+      <path class="dg-water" d="M90.6,120 H469.4 L370,236 H190 Z" />
+      <path class="dg-ground" d="M0,96 H70 L190,236 H370 L490,96 H560 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,96 H70 L190,236 H370 L490,96 H560 V300 H0 Z" />
+      <path class="dg-line" d="M0,96 H70 L190,236 H370 L490,96 H560" />
+      <path class="dg-membrane" d="M14,96 V110 H34 V96 H70 L190,236 H370 L490,96 H526 V110 H546 V96" />
+      <line class="dg-wl" x1="90.6" y1={WL} x2="469.4" y2={WL} />
+      <polygon class="dg-tri" points={tri(280)} />
+      <text class="dg-label" x="250" y="184">вода</text>
+      <text class="dg-label dg-halo" x="206" y="282">геомембрана</text>
+      <line class="dg-lead" x1="300" y1="264" x2="300" y2="240" />
+      <text class="dg-label dg-halo" x="452" y="262">ґрунт</text>
+    </g>
+  )}
+
+  {kind === "lagoon" && (
+    <g>
+      <path class="dg-water" d="M126.9,120 H433.1 L360,250 H200 Z" />
+      <path class="dg-ground" d="M0,160 H10 L60,90 H110 L200,250 H360 L450,90 H500 L550,160 H560 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,160 H10 L60,90 H110 L200,250 H360 L450,90 H500 L550,160 H560 V300 H0 Z" />
+      <path class="dg-line" d="M0,160 H10 L60,90 H110 L200,250 H360 L450,90 H500 L550,160 H560" />
+      <path class="dg-dash" d="M10,160 H550" />
+      <path class="dg-membrane" d="M60,90 H110 L200,250 H360 L450,90 H500" />
+      <line class="dg-wl" x1="126.9" y1={WL} x2="433.1" y2={WL} />
+      <polygon class="dg-tri" points={tri(280)} />
+      <text class="dg-label" x="16" y="66">обвалування</text>
+      <text class="dg-label" x="236" y="184">лагуна</text>
+      <text class="dg-label dg-halo" x="206" y="288">геомембрана</text>
+      <line class="dg-lead" x1="290" y1="270" x2="290" y2="254" />
+      <text class="dg-label dg-halo" x="450" y="236">ґрунт</text>
+    </g>
+  )}
+
+  {kind === "profile" && (
+    <g>
+      <path class="dg-water" d="M0,120 H136 V150 L118,150 L60,190 L0,200 Z" />
+      <path class="dg-ground" d="M0,200 L60,190 L118,150 H136 V92 H330 L370,72 H560 V300 H0 Z" />
+      <path class="dg-ground-hatch" fill={`url(#${hatch})`} d="M0,200 L60,190 L118,150 H136 V92 H330 L370,72 H560 V300 H0 Z" />
+      <path class="dg-line dg-line--bold" d="M0,200 L60,190 L118,150 H136 V92 H330 L370,72 H560" />
+      <rect class="dg-solid" x="136" y="92" width="8" height="64" />
+      <path class="dg-dash" d="M110,150 L150,118 L200,108 L250,96 L300,104 L350,84 L400,92 L450,70 L500,78 L560,62" />
+      <line class="dg-wl" x1="0" y1={WL} x2="136" y2={WL} />
+      <polygon class="dg-tri" points={tri(60)} />
+      <text class="dg-label" x="16" y="170">вода</text>
+      <text class="dg-label" x="168" y="50">проєктний рельєф</text>
+      <line class="dg-lead" x1="230" y1="58" x2="230" y2="90" />
+      <text class="dg-label dg-halo" x="300" y="150">існуючий рельєф</text>
+      <line class="dg-lead" x1="396" y1="130" x2="404" y2="94" />
+    </g>
+  )}
+</svg>
+
+<style>
+  .diagram { width: 100%; height: auto; font-family: var(--font-body); }
+  .diagram text { font-size: var(--dg-fs, 14px); font-weight: 600; }
+  .diagram--light .dg-paper { fill: var(--color-surface); }
+  .diagram--light .dg-water { fill: var(--color-water-fill); }
+  .diagram--light .dg-ground { fill: var(--color-sand); }
+  .diagram--light .dg-hatch { stroke: var(--color-text); stroke-width: .6; opacity: .28; }
+  .diagram--light .dg-line { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  .diagram--light .dg-line--bold { stroke-width: 2.5; }
+  .diagram--light .dg-dash { fill: none; stroke: var(--color-text); stroke-width: 1.5; stroke-dasharray: 6 5; }
+  .diagram--light .dg-geo { fill: none; stroke: var(--color-text); stroke-width: 1.5; stroke-dasharray: 7 4; }
+  .diagram--light .dg-mat { stroke: var(--color-text); stroke-width: 4; stroke-dasharray: 2 4; }
+  .diagram--light .dg-membrane { fill: none; stroke: var(--color-text); stroke-width: 3.5; stroke-linejoin: round; }
+  .diagram--light .dg-gabion { fill: var(--color-surface); stroke: var(--color-text); stroke-width: 1.5; }
+  .diagram--light .dg-stone { fill: none; stroke: var(--color-text); stroke-width: .9; opacity: .7; }
+  .diagram--light .dg-solid { fill: var(--color-text); }
+  .diagram--light .dg-deck { fill: var(--color-text); }
+  .diagram--light .dg-wl { stroke: var(--color-waterline); stroke-width: 2; }
+  .diagram--light .dg-tri { fill: var(--color-waterline); }
+  .diagram--light .dg-lead { stroke: var(--color-text); stroke-width: 1; }
+  .diagram--light .dg-label { fill: var(--color-text); }
+  .diagram--light .dg-halo { paint-order: stroke; stroke: var(--color-sand); stroke-width: 5px; stroke-linejoin: round; }
+
+  .diagram--dark .dg-water { fill: var(--color-water-fill-dark); }
+  .diagram--dark .dg-ground { fill: var(--color-ground-dark); }
+  .diagram--dark .dg-hatch { stroke: var(--color-on-water); stroke-width: .6; opacity: .22; }
+  .diagram--dark .dg-line { fill: none; stroke: var(--color-on-water); stroke-width: 1.5; }
+  .diagram--dark .dg-solid { fill: var(--color-on-water); }
+  .diagram--dark .dg-tie { stroke: var(--color-on-water); stroke-width: 2.5; }
+  .diagram--dark .dg-lead { stroke: var(--color-on-water); stroke-width: 1; }
+  .diagram--dark .dg-label { fill: var(--color-on-water); }
+  .diagram--dark .dg-halo { paint-order: stroke; stroke: var(--color-ground-dark); stroke-width: 5px; stroke-linejoin: round; }
+</style>

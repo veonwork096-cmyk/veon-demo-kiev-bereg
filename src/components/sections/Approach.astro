@@ -1,0 +1,57 @@
+---
+import { approach } from "../../data/site";
+---
+<section id="approach" class="section approach on-water" data-rec="R-103" aria-labelledby="approach-title">
+  <div class="container">
+    <div class="section__head">
+      <h2 id="approach-title">Ціну і строки знаєте до початку робіт</h2>
+      <p>Строки, контроль і ціна — три правила «Берега». Умови, обсяг робіт і гарантійні зобов'язання фіксуються в договорі.</p>
+    </div>
+    <div class="shore" data-reveal="shore">
+      <span class="shore__track" aria-hidden="true"><span class="shore__fill"></span></span>
+      <ol class="shore__list">
+      {approach.map((a) => (
+        <li class="shore__step">
+          <span class="shore__point" aria-hidden="true"></span>
+          <h3>{a.title}</h3>
+          <p>{a.text}</p>
+        </li>
+      ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .approach { background: var(--color-water); }
+  .approach h2 { color: var(--color-on-water); }
+  .shore { position: relative; padding-left: var(--s4); }
+  .shore__list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s4); }
+  .shore__track { position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: color-mix(in srgb, var(--color-on-water) 22%, transparent); }
+  .shore__fill { position: absolute; inset: 0; background: var(--color-waterline); transform-origin: top center; }
+  .shore__step { position: relative; display: grid; gap: var(--s1); max-width: 30rem; }
+  .shore__point { position: absolute; left: calc(-1 * var(--s4)); top: 6px; width: 16px; height: 16px; border-radius: 50%; background: var(--color-water); border: 2px solid var(--color-waterline); }
+  .shore__step h3 { font-size: var(--fs-h3); color: var(--color-on-water); }
+  .shore__step p { color: var(--color-on-water-muted); }
+  .shore__step:last-child .shore__point { background: var(--color-waterline); }
+
+  @media (min-width: 1024px) {
+    .shore { padding: var(--s4) 0 0; }
+    .shore__list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gutter); }
+    .shore__track { left: 0; right: 0; top: 7px; bottom: auto; width: auto; height: 2px; }
+    .shore__fill { transform-origin: left center; }
+    .shore__point { left: 0; top: calc(-1 * var(--s4)); }
+    .shore__step { padding-right: var(--s3); }
+  }
+
+  /* Effect 4: the shoreline fills from the first point to the contract (scaleY on phones, scaleX from 1024). */
+  :global(.js) .shore .shore__fill { transition: transform 600ms var(--ease-out); }
+  :global(.js) .shore:not(.is-visible) .shore__fill { transform: scaleY(0); }
+  @media (min-width: 1024px) {
+    :global(.js) .shore .shore__fill { transition-duration: 900ms; }
+    :global(.js) .shore:not(.is-visible) .shore__fill { transform: scaleX(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .shore:not(.is-visible) .shore__fill { transform: none; }
+  }
+</style>
